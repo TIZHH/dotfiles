@@ -32,11 +32,10 @@ zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}'
 
 # ===== Optional tools and plugins =====
 if [[ -o interactive && -t 0 ]] && command -v fzf >/dev/null 2>&1; then
-    # Keep Ctrl+R simple: open a single-select popup and seed its search with
-    # the command prefix that is already present on the current command line.
-    if [[ -z "${FZF_CTRL_R_OPTS:-}" ]]; then
-        export FZF_CTRL_R_OPTS="--height=45% --layout=reverse --border=rounded --prompt='History > ' --info=inline --no-multi"
-    fi
+    # This is the same integration that Oh My Zsh's fzf plugin used. It opens
+    # the Ctrl+R history popup and seeds the query with the current LBUFFER.
+    # Clear the custom value used by an earlier dotfiles revision.
+    unset FZF_CTRL_R_OPTS
     eval "$(fzf --zsh)"
 fi
 
