@@ -82,3 +82,6 @@ ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 if [[ -r /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh ]]; then
     source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 fi
+
+# Machine-specific settings and secrets belong here, outside this repository.
+[[ -r "$HOME/.zshrc.local" ]] && source "$HOME/.zshrc.local"

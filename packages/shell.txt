@@ -1,0 +1,10 @@
+# Shell
+zsh
+fzf
+pkgfile
+xclip
+
+# Zsh plugins referenced by .zshrc
+zsh-autosuggestions
+zsh-history-substring-search
+zsh-syntax-highlighting

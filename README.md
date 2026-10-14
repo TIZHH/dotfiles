@@ -9,13 +9,14 @@
 - Waybar
 - Wofi
 - Kitty
+- Zsh、fzf 与常用补全/高亮插件
 - 当前桌面和锁屏使用的壁纸
 - Hyprland 环境所需的软件包清单
 
 ## 新系统恢复
 
 ```bash
-git clone <仓库地址> ~/Workspace/dotfiles
+git clone git@github.com:TIZHH/dotfiles.git ~/Workspace/dotfiles
 cd ~/Workspace/dotfiles
 ./bootstrap.sh --install
 ```
@@ -43,8 +44,12 @@ sudo systemctl enable --now NetworkManager bluetooth
 ~/.config/waybar
 ~/.config/wofi
 ~/.config/kitty
+~/.zshrc
 ~/Pictures/papers/pexels-splitshire-1562.jpg
 ```
+
+每台机器独有的路径、代理设置和密钥应写入不受 Git 管理的
+`~/.zshrc.local`；仓库中的 `.zshrc` 会在最后自动加载它。
 
 修改配置后正常使用 Git 提交即可：
 

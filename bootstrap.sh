@@ -3,8 +3,8 @@
 set -euo pipefail
 
 repo_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
-package_file="$repo_dir/packages/hyprland.txt"
-stow_packages=(hypr waybar wofi kitty wallpapers)
+package_dir="$repo_dir/packages"
+stow_packages=(hypr waybar wofi kitty wallpapers zsh)
 
 usage() {
     cat <<'EOF'
@@ -32,7 +32,20 @@ case "${1:-}" in
 esac
 
 if "$install_packages"; then
-    mapfile -t desktop_packages < <(sed -e 's/[[:space:]]*#.*$//' -e '/^[[:space:]]*$/d' "$package_file")
+    if ! command -v pacman >/dev/null 2>&1; then
+        echo "error: pacman is required to install packages" >&2
+        exit 1
+    fi
+
+    mapfile -t package_files < <(find "$package_dir" -maxdepth 1 -type f -name '*.txt' -print | sort)
+    if ((${#package_files[@]} == 0)); then
+        echo "error: no package lists found in $package_dir" >&2
+        exit 1
+    fi
+
+    mapfile -t desktop_packages < <(
+        sed -e 's/[[:space:]]*#.*$//' -e '/^[[:space:]]*$/d' "${package_files[@]}" | sort -u
+    )
     sudo pacman -S --needed "${desktop_packages[@]}"
 fi
 
@@ -43,8 +56,8 @@ fi
 
 mkdir -p "$HOME/.config" "$HOME/Pictures/papers"
 
-for package in "${stow_packages[@]}"; do
-    stow --dir "$repo_dir" --target "$HOME" --restow "$package"
-done
+# Check every package first so a conflict cannot leave a partially linked setup.
+stow --dir "$repo_dir" --target "$HOME" --simulate --restow "${stow_packages[@]}"
+stow --dir "$repo_dir" --target "$HOME" --restow "${stow_packages[@]}"
 
 echo "Dotfiles linked successfully."
