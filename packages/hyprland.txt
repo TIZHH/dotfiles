@@ -45,6 +45,5 @@ noto-fonts-emoji
 polkit-kde-agent
 qt6-wayland
 
-# Dotfiles management
+# Repository access
 git
-stow

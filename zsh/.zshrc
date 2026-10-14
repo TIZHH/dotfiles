@@ -8,7 +8,7 @@ fi
 if [[ -r /usr/share/cachyos-zsh-config/cachyos-config.zsh ]]; then
     source /usr/share/cachyos-zsh-config/cachyos-config.zsh
 else
-    print -u2 "CachyOS Zsh config is missing; run ./bootstrap.sh --install"
+    print -u2 "CachyOS Zsh config is missing; run ./install-packages.sh"
 fi
 
 # Secret values stay outside Git. See ~/.zshrc.secrets.example.

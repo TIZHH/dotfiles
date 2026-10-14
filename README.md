@@ -1,93 +1,114 @@
 # CachyOS dotfiles
 
-用于在重装 CachyOS 后恢复当前的 Hyprland 桌面环境。配置由 GNU Stow 管理，仓库中的文件会链接到主目录，因此日常修改 `~/.config` 下的配置也会直接反映到本仓库。
+这个仓库只用于通过 GitHub 保存 CachyOS 桌面和开发环境配置。它不自动部署配置，也不创建软链接；备份和恢复都使用普通的 `cp` 命令。
 
-## 当前包含
+## 保存的内容
 
-- Hyprland：显示器、环境变量、动画、窗口规则与快捷键
-- Hyprlock 与 Hyprpaper
-- Waybar
-- Wofi
-- Kitty
-- CachyOS Zsh、Oh My Zsh、Powerlevel10k、fzf 与常用补全/高亮插件
-- 当前桌面和锁屏使用的壁纸
-- Hyprland 环境所需的软件包清单
+- `hypr/.config/hypr/`：Hyprland、Hyprlock 和 Hyprpaper
+- `waybar/.config/waybar/`：Waybar 配置和样式
+- `wofi/.config/wofi/`：Wofi 配置和样式
+- `kitty/.config/kitty/`：Kitty 配置
+- `zsh/`：默认的 CachyOS Zsh、Oh My Zsh 和 Powerlevel10k 配置
+- `variants/zsh/zshrc.no-oh-my-zsh`：不使用 Oh My Zsh 的备用配置
+- `wallpapers/Pictures/papers/`：桌面和锁屏壁纸
+- `packages/*.txt`：需要安装的软件包清单
 
-## 新系统恢复
+## 安装软件包
 
-```bash
-git clone git@github.com:TIZHH/dotfiles.git ~/Workspace/dotfiles
-cd ~/Workspace/dotfiles
-./bootstrap.sh --install
-```
-
-如果软件已经安装，只创建配置链接：
+脚本只读取 `packages/*.txt`，去掉注释和重复项，然后通过 `pacman` 安装缺少的软件：
 
 ```bash
-./bootstrap.sh
+./install-packages.sh
 ```
 
-Hyprland、Kitty 和 Zsh 的同名旧文件会先备份，再由仓库配置替换。其他配置不会被覆盖；如果 Stow 报告冲突，请先备份对应配置，再重新执行脚本。真实的 `~/.zshrc.secrets` 不会被覆盖。
+它不会复制配置、覆盖文件或启用系统服务。
 
-## `bootstrap.sh` 做了什么
-
-- 使用 `--install` 时，读取 `packages/*.txt`，去重后通过 `pacman` 安装缺少的软件。
-- 检查 GNU Stow，并创建必要的 `~/.config` 和壁纸目录。
-- Hyprland、Kitty 和 Zsh 遇到同名普通文件时，先备份到 `~/.local/state/dotfiles-backup/`，再使用仓库版本。
-- 先模拟检查全部链接；其他配置遇到冲突时直接停止，并恢复本次临时移动的文件。
-- 使用 Stow 将 Hyprland、Waybar、Wofi、Kitty、壁纸和默认 Zsh 配置链接到主目录。
-- 不带参数运行时只更新配置链接，不安装软件。
-
-脚本不会写入私密配置，也不会自动启用 NetworkManager、蓝牙等系统服务。
-
-网络和蓝牙服务可在新系统中按需启用：
+网络和蓝牙服务可按需手动启用：
 
 ```bash
 sudo systemctl enable --now NetworkManager bluetooth
 ```
 
-## 日常同步
+## 备份当前配置
 
-这些目录现在由仓库管理：
-
-```text
-~/.config/hypr
-~/.config/waybar
-~/.config/wofi
-~/.config/kitty
-~/.zshrc
-~/Pictures/papers/pexels-splitshire-1562.jpg
-```
-
-`bootstrap.sh` 默认部署 `zsh/.zshrc`，使用 CachyOS 提供的 Oh My Zsh、
-fzf 和 Powerlevel10k 配置。个人代理、AI/Codex 和项目路径也保留在该文件中。
-
-不使用 Oh My Zsh 的旧配置保存在
-`variants/zsh/zshrc.no-oh-my-zsh`，仅用于参考或手动切换，不会被恢复脚本部署。
-Powerlevel10k 的外观配置保存在 `zsh/.p10k.zsh`。
-
-令牌和 Wi-Fi 密码不应进入 Git。首次恢复后创建私密配置：
+在仓库根目录执行：
 
 ```bash
-cp ~/.zshrc.secrets.example ~/.zshrc.secrets
-chmod 600 ~/.zshrc.secrets
+mkdir -p hypr/.config/hypr waybar/.config/waybar
+mkdir -p wofi/.config/wofi kitty/.config/kitty
+mkdir -p wallpapers/Pictures/papers
+
+cp -a ~/.config/hypr/. hypr/.config/hypr/
+cp -a ~/.config/waybar/. waybar/.config/waybar/
+cp -a ~/.config/wofi/. wofi/.config/wofi/
+cp -a ~/.config/kitty/. kitty/.config/kitty/
+cp -a ~/Pictures/papers/pexels-splitshire-1562.jpg wallpapers/Pictures/papers/
 ```
 
-然后填写 `~/.zshrc.secrets`。`.zshrc` 会自动加载该文件，但不会打印令牌内容。
+确认 `~/.zshrc` 不含令牌、密码等敏感信息后，再备份 Zsh：
 
-修改配置后正常使用 Git 提交即可：
+```bash
+cp -a ~/.zshrc zsh/.zshrc
+cp -a ~/.p10k.zsh zsh/.p10k.zsh
+```
+
+不要提交 `~/.zshrc.secrets`、SSH 私钥、API Token、Wi-Fi 密码或其他凭据。
+
+检查并推送：
 
 ```bash
 git status
+git diff
 git add .
-git commit -m "Update desktop config"
+git commit -m "Update dotfiles"
 git push
 ```
 
+## 在新系统恢复
+
+克隆仓库并安装软件：
+
+```bash
+git clone git@github.com:TIZHH/dotfiles.git ~/Workspace/dotfiles
+cd ~/Workspace/dotfiles
+./install-packages.sh
+```
+
+复制桌面配置和壁纸：
+
+```bash
+mkdir -p ~/.config/hypr ~/.config/waybar ~/.config/wofi ~/.config/kitty
+mkdir -p ~/Pictures/papers
+
+cp -a hypr/.config/hypr/. ~/.config/hypr/
+cp -a waybar/.config/waybar/. ~/.config/waybar/
+cp -a wofi/.config/wofi/. ~/.config/wofi/
+cp -a kitty/.config/kitty/. ~/.config/kitty/
+cp -a wallpapers/Pictures/papers/. ~/Pictures/papers/
+```
+
+复制默认 Zsh 配置：
+
+```bash
+cp -a zsh/.zshrc ~/
+cp -a zsh/.p10k.zsh ~/
+cp -a zsh/.zshrc.secrets.example ~/.zshrc.secrets
+chmod 600 ~/.zshrc.secrets
+```
+
+编辑 `~/.zshrc.secrets` 填入本机需要的凭据。若不想使用 Oh My Zsh，可以改用备用版本：
+
+```bash
+cp -a variants/zsh/zshrc.no-oh-my-zsh ~/.zshrc
+```
+
+完成后重新登录桌面会话，或者按需重启相关程序。
+
 ## 机器相关设置
 
-以下内容仍与当前硬件有关，换机器后可能需要修改：
+换机器后需要检查：
 
-- `eDP-1` 与 `HDMI-A-1` 显示器名称
-- 笔记本屏幕缩放比例 `1.67`
-- Waybar 使用的 `intel_backlight` 背光设备
+- `hyprland.lua` 中的显示器名称、位置和缩放比例
+- `hyprpaper.conf` 中的显示器名称
+- Waybar 中的 `intel_backlight` 设备名称
+- Zsh 中的个人项目路径
