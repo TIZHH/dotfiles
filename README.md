@@ -27,13 +27,14 @@ cd ~/Workspace/dotfiles
 ./bootstrap.sh
 ```
 
-脚本不会覆盖主目录中已有的普通文件。如果 Stow 报告冲突，请先备份对应配置，再重新执行脚本。
+Hyprland 和 Kitty 的同名旧文件会先备份，再由仓库配置替换。其他配置不会被覆盖；如果 Stow 报告冲突，请先备份对应配置，再重新执行脚本。
 
 ## `bootstrap.sh` 做了什么
 
 - 使用 `--install` 时，读取 `packages/*.txt`，去重后通过 `pacman` 安装缺少的软件。
 - 检查 GNU Stow，并创建必要的 `~/.config` 和壁纸目录。
-- 先模拟检查全部链接；遇到已有普通文件时直接停止，不进行部分部署或覆盖。
+- Hyprland 和 Kitty 遇到同名普通文件时，先备份到 `~/.local/state/dotfiles-backup/`，再使用仓库版本。
+- 先模拟检查全部链接；其他配置遇到冲突时直接停止，并恢复本次临时移动的文件。
 - 使用 Stow 将 Hyprland、Waybar、Wofi、Kitty、壁纸和默认 Zsh 配置链接到主目录。
 - 不带参数运行时只更新配置链接，不安装软件。
 

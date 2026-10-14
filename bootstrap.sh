@@ -5,6 +5,11 @@ set -euo pipefail
 repo_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 package_dir="$repo_dir/packages"
 stow_packages=(hypr waybar wofi kitty wallpapers zsh)
+overwrite_sources=(hypr/.config/hypr kitty/.config/kitty)
+overwrite_targets=(.config/hypr .config/kitty)
+backup_dir=""
+declare -a moved_targets=()
+declare -a moved_backups=()
 
 usage() {
     cat <<'EOF'
@@ -56,8 +61,73 @@ fi
 
 mkdir -p "$HOME/.config" "$HOME/Pictures/papers"
 
+backup_conflicts() {
+    local index source relative target backup
+
+    for index in "${!overwrite_targets[@]}"; do
+        relative="${overwrite_targets[$index]}"
+        source="$repo_dir/${overwrite_sources[$index]}"
+        target="$HOME/$relative"
+
+        if [[ ! -e "$target" && ! -L "$target" ]]; then
+            continue
+        fi
+
+        if [[ "$(readlink -f -- "$target")" == "$(readlink -f -- "$source")" ]]; then
+            continue
+        fi
+
+        if [[ -z "$backup_dir" ]]; then
+            backup_dir="$HOME/.local/state/dotfiles-backup/$(date +%Y%m%d-%H%M%S)-bootstrap-$$"
+        fi
+
+        backup="$backup_dir/$relative"
+        mkdir -p "$(dirname -- "$backup")"
+        mv -- "$target" "$backup"
+        moved_targets+=("$target")
+        moved_backups+=("$backup")
+        echo "Backed up $target"
+    done
+}
+
+restore_conflicts() {
+    local index target backup
+
+    for ((index = ${#moved_targets[@]} - 1; index >= 0; index--)); do
+        target="${moved_targets[$index]}"
+        backup="${moved_backups[$index]}"
+
+        if [[ -L "$target" || -f "$target" ]]; then
+            rm -f -- "$target"
+        elif [[ -d "$target" ]]; then
+            rmdir -- "$target" 2>/dev/null || true
+        fi
+
+        mkdir -p "$(dirname -- "$target")"
+        mv -- "$backup" "$target"
+        echo "Restored $target"
+    done
+}
+
+rollback() {
+    local status="$1"
+    trap - ERR INT TERM
+    set +e
+    restore_conflicts
+    exit "$status"
+}
+
+trap 'rollback $?' ERR
+trap 'rollback 130' INT
+trap 'rollback 143' TERM
+backup_conflicts
+
 # Check every package first so a conflict cannot leave a partially linked setup.
 stow --dir "$repo_dir" --target "$HOME" --simulate --restow "${stow_packages[@]}"
 stow --dir "$repo_dir" --target "$HOME" --restow "${stow_packages[@]}"
+trap - ERR INT TERM
 
 echo "Dotfiles linked successfully."
+if [[ -n "$backup_dir" ]]; then
+    echo "Previous Hyprland/Kitty files were saved to $backup_dir"
+fi
