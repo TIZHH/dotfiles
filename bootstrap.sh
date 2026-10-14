@@ -5,8 +5,20 @@ set -euo pipefail
 repo_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 package_dir="$repo_dir/packages"
 stow_packages=(hypr waybar wofi kitty wallpapers zsh)
-overwrite_sources=(hypr/.config/hypr kitty/.config/kitty)
-overwrite_targets=(.config/hypr .config/kitty)
+overwrite_sources=(
+    hypr/.config/hypr
+    kitty/.config/kitty
+    zsh/.zshrc
+    zsh/.p10k.zsh
+    zsh/.zshrc.secrets.example
+)
+overwrite_targets=(
+    .config/hypr
+    .config/kitty
+    .zshrc
+    .p10k.zsh
+    .zshrc.secrets.example
+)
 backup_dir=""
 declare -a moved_targets=()
 declare -a moved_backups=()
@@ -17,8 +29,8 @@ Usage: ./bootstrap.sh [--install]
 
   --install  Install the desktop packages with pacman before linking configs.
 
-Without --install, only the config links are created. Existing unmanaged files
-are never overwritten; GNU Stow will stop and report conflicts.
+Without --install, only the config links are created. Existing Hyprland, Kitty,
+and Zsh targets are backed up and replaced; other conflicts stop GNU Stow.
 EOF
 }
 
@@ -129,5 +141,5 @@ trap - ERR INT TERM
 
 echo "Dotfiles linked successfully."
 if [[ -n "$backup_dir" ]]; then
-    echo "Previous Hyprland/Kitty files were saved to $backup_dir"
+    echo "Previous Hyprland/Kitty/Zsh files were saved to $backup_dir"
 fi
