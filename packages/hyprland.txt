@@ -47,3 +47,4 @@ qt6-wayland
 
 # Repository access
 git
+stow
