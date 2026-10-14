@@ -1,0 +1,13 @@
+# Wofi 精致日用版配置
+show = drun
+prompt = 应用
+
+# 尺寸保持克制：宽度不变，略增高度，让结果列表更舒展
+width = 40%
+height = 44%
+insensitive = true
+always_parse_args = true
+
+# 位置与外观
+location = center
+layer = overlay

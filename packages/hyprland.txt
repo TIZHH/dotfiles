@@ -1,0 +1,50 @@
+# Hyprland desktop
+hyprland
+hyprland-guiutils
+hyprlock
+hyprpaper
+uwsm
+xdg-desktop-portal-hyprland
+
+# Desktop components
+waybar
+wofi
+swaync
+kitty
+dolphin
+
+# Commands referenced by the Hyprland and Waybar configs
+brightnessctl
+playerctl
+grim
+slurp
+swappy
+wl-clipboard
+networkmanager
+network-manager-applet
+bluez
+bluez-utils
+blueman
+pavucontrol
+pipewire-pulse
+wireplumber
+
+# Input method
+fcitx5
+fcitx5-chinese-addons
+fcitx5-configtool
+fcitx5-gtk
+fcitx5-material-color
+fcitx5-pinyin-zhwiki
+
+# Fonts and desktop integration
+ttf-jetbrains-mono-nerd
+noto-fonts
+noto-fonts-cjk
+noto-fonts-emoji
+polkit-kde-agent
+qt6-wayland
+
+# Dotfiles management
+git
+stow

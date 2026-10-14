@@ -1,0 +1,138 @@
+/* ====================================================
+   Waybar CSS 样式文件 (Hyprland/Sway 兼容)
+   文件路径: ~/.config/waybar/style.css
+   描述: 无背景框的极简悬浮风格, Catppuccin 配色主题
+   ==================================================== */
+
+/* ===== 1. 全局基础样式重置 (必须放在最前面) ===== */
+* {
+    all: unset;                      /* 清除所有浏览器/系统默认样式 (内外边距, 边框, 颜色等) */
+    font-family: "JetBrainsMono Nerd Font", sans-serif; /* 首选字体: 包含图标的 Nerd Font, 备用为系统无衬线字体 */
+    font-size: 13px;                 /* 全局基础文字大小 */
+    min-height: 0;                   /* 防止某些元素(如模块容器)因内容而异常拉伸高度 */
+}
+
+/* ===== 2. Waybar 主窗口容器 (状态栏背景和边框) ===== */
+window#waybar {
+    background: rgba(20, 20, 30, 0.8);  /* 背景颜色: 深蓝灰色, 80% 不透明度 (最后一位 0.8 控制透明度) */
+    border-radius: 12px;                 /* 窗口圆角半径, 值越大越圆 */
+    color: #cccccc;                      /* 状态栏内所有文本的默认颜色 (浅灰色) */
+    border: 1px solid rgba(100, 100, 120, 0.15); /* 极细边框: 1像素宽, 灰蓝色, 15%透明度 */
+    margin: 8px 8px 0 8px;               /* 外边距: 上8px, 左右8px, 下0 (控制状态栏在屏幕上的位置) */
+}
+
+/* ===== 3. 所有功能模块的通用间距 (统一控制布局紧凑度) ===== */
+/* 此规则适用于下面列出的所有模块ID */
+#clock,
+#workspaces,
+#network,
+#bluetooth,
+#pulseaudio,
+#backlight,
+#cpu,
+#memory,
+#battery,
+#tray {
+    padding: 0 6px;  /* 模块内边距: 上下0, 左右6px (增加此值会让模块更宽) */
+    margin: 0 1px;   /* 模块外边距: 左右1px (控制模块之间的间隔, 增加此值会更分散) */
+}
+
+/* ===== 4. 左侧模块: 时钟 ===== */
+#clock {
+    color: #89b4fa;     /* 时钟文字颜色: Catppuccin 主题的蓝色 */
+    font-weight: 600;   /* 字体粗细: 半粗体 (400=正常, 600=半粗, 700=加粗) */
+    padding: 0 10px;    /* 覆盖通用间距, 为时钟提供更多左右空间, 使其更突出 */
+}
+
+/* ===== 5. 中间模块: 工作区 (用于 Hyprland 或 Sway 窗口管理器) ===== */
+/* 5.1 工作区容器 */
+#workspaces {
+    margin: 0 4px;  /* 工作区容器自身的左右外边距, 使其与左右模块稍有距离 */
+}
+
+/* 5.2 工作区按钮 - 基础/默认状态 (未激活且无窗口) */
+#workspaces button {
+    color: #888888;          /* 按钮文字颜色: 中灰色 */
+    border-radius: 8px;      /* 按钮圆角大小 */
+    margin: 0 2px;           /* 按钮之间的水平间距 */
+    padding: 4px 10px;       /* 按钮内边距: 上下4px, 左右10px (控制按钮的宽高) */
+    min-width: 28px;         /* 按钮最小宽度, 确保单个数字(如"1")也能对齐 */
+    transition: all 0.2s ease; /* 过渡动画: 当按钮状态变化(如悬停, 激活)时, 所有属性在0.2秒内平滑变化 */
+    font-size: 13px;         /* 按钮文字大小 */
+    font-weight: 500;        /* 按钮文字粗细: 中等 */
+}
+
+/* 5.3 工作区按钮 - 鼠标悬停状态 */
+#workspaces button:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* 悬停时背景: 10% 不透明白色 */
+    color: #bbbbbb;                             /* 悬停时文字颜色: 更亮的灰色 */
+}
+
+/* 5.4 工作区按钮 - 当前激活/聚焦的工作区 */
+#workspaces button.active {
+    background: linear-gradient(135deg, #646cff, #a855f7); /* 渐变背景: 从蓝色(#646cff)到紫色(#a855f7), 135度角 */
+    color: #ffffff;        /* 激活时文字颜色: 纯白 */
+    font-weight: 600;      /* 激活时文字加粗 */
+}
+
+/* 5.5 工作区按钮 - 有窗口但未激活的工作区 */
+#workspaces button.occupied {
+    color: #cccccc;  /* 文字颜色: 浅灰色, 比默认状态(.button)稍亮, 提示有窗口存在 */
+}
+
+/* 5.6 工作区按钮 - 紧急状态 (如: QQ收到新消息, 应用请求关注) */
+#workspaces button.urgent {
+    background-color: rgba(239, 68, 68, 0.25); /* 背景颜色: 红色, 25% 不透明度 */
+    color: #f87171;                            /* 文字颜色: Catppuccin 主题的红色 */
+}
+
+/* ===== 6. 右侧模块: 系统状态指示器 ===== */
+/* 6.1 蓝牙模块 */
+#bluetooth { color: #89b4fa; }               /* 默认/已连接: 蓝色 */
+#bluetooth.disconnected { color: #666666; }  /* 断开/关闭: 深灰色 */
+
+/* 6.2 屏幕背光(亮度)模块 */
+#backlight { color: #f9e2af; }  /* Catppuccin 主题的黄色 */
+
+/* 6.3 网络模块 */
+#network { color: #a6e3a1; }               /* 已连接: 绿色 */
+#network.disconnected { color: #666666; }  /* 断开: 深灰色 */
+
+/* 6.4 音频(PulseAudio)模块 */
+#pulseaudio { color: #cba6f7; }       /* 正常: 紫色 */
+#pulseaudio.muted { color: #f38ba8; } /* 静音: 红色 */
+
+/* 6.5 CPU 使用率模块 */
+#cpu { color: #fab387; }       /* 正常: 橙色 */
+#cpu.high { color: #f38ba8; }  /* 高负载(通常>80%): 红色 */
+
+/* 6.6 内存使用率模块 */
+#memory { color: #74c7ec; }     /* 正常: 青色 */
+#memory.high { color: #f38ba8; } /* 高占用(通常>80%): 红色 */
+
+/* 6.7 电池模块 */
+#battery { color: #a6e3a1; }                 /* 正常: 绿色 */
+#battery.warning { color: #f9e2af; }         /* 警告(电量低, 如<20%): 黄色 */
+#battery.critical { color: #f38ba8; }        /* 严重(电量极低, 如<10%): 红色 */
+#battery.charging,                           /* 充电中 */
+#battery.plugged { color: #a6e3a1; }         /* 接通电源: 绿色 */
+
+/* 6.8 系统托盘模块 (容纳后台应用的小图标) */
+#tray {
+    padding: 0 6px;  /* 托盘容器的内边距 */
+}
+#tray > * {
+    margin: 0 2px;   /* 托盘内各个图标之间的间距 */
+}
+
+/* ===== 7. 工具提示样式 (鼠标悬停在模块上时出现的提示框) ===== */
+tooltip {
+    background-color: rgba(20, 20, 30, 0.95);  /* 背景: 深色, 95%不透明度 */
+    border: 1px solid rgba(100, 100, 120, 0.3); /* 边框 */
+    border-radius: 8px;      /* 圆角 */
+    padding: 8px 12px;       /* 内边距 */
+    color: #dddddd;          /* 文字颜色: 浅灰色 */
+}
+tooltip label {
+    font-size: 12px;   /* 工具提示内的文字略小 */
+}

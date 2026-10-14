@@ -1,0 +1,95 @@
+{
+  "$schema": "https://gist.githubusercontent.com/LordZed400/4e2b4b4b4b4b4b4b4b4b/raw/waybar.schema.json",
+  "layer": "top",
+  "position": "top",
+  "height": 36,
+  "margin-top": 6,
+  "margin-left": 6,
+  "margin-right": 6,
+  "spacing": 6,
+  "modules-left": ["clock","cpu","memory"],
+  "modules-center": ["ext/workspaces"],
+  "modules-right": ["tray", "network", "bluetooth", "pulseaudio", "backlight", "battery"],
+
+  // ========== Hyprland 模块 ==========
+  "ext/workspaces": {
+    "format": "{name}",
+    "on-click": "activate"
+  },
+
+  // ========== 系统模块 ==========
+  "clock": {
+    "format": " {:%H:%M}",
+    "format-alt": " {:%Y-%m-%d}",
+    "tooltip-format": "<big>{:%Y年%m月%d日 星期%u}</big>",
+    "interval": 1
+  },
+
+  "network": {
+    "format-wifi": " {essid}",
+    "format-ethernet": " 有线",
+    "format-disconnected": " 离线",
+    "tooltip-format": "{ifname} {ipaddr}",
+    "on-click": "hyprctl dispatch 'hl.dsp.exec_cmd([[nm-connection-editor]])'",  // 在当前工作区打开网络管理器
+    "interval": 5
+  },
+
+  "bluetooth": {
+    "format": "",
+    "format-disabled": "",  // 蓝牙关闭
+    "format-connected": "", // 已连接设备
+    "tooltip-format": "{status}",
+    "on-click": "hyprctl dispatch 'hl.dsp.exec_cmd([[blueman-manager]])'",  // 在当前工作区打开蓝牙管理器
+    "interval": 5
+  },
+
+  "pulseaudio": {
+    "format": "{icon} {volume}%",
+    "format-bluetooth": " {icon} {volume}%",
+    "format-muted": " 静音",
+    "format-icons": {
+      "default": ["", "", ""]
+    },
+    "scroll-step": 5,  // 鼠标滚轮步进
+    "on-click": "hyprctl dispatch 'hl.dsp.exec_cmd([[pavucontrol]])'",  // 在当前工作区打开音频控制
+    "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+  },
+
+  "backlight": {
+    "device": "intel_backlight",  // 根据你的硬件修改
+    "format": "{icon} {percent}%",
+    "format-icons": ["", "", "", "", "", "", "", "", ""],
+    "scroll-step": 5,  // 鼠标滚轮步进
+    "on-scroll-up": "brightnessctl set 5%+",
+    "on-scroll-down": "brightnessctl set 5%-"
+  },
+
+  "cpu": {
+    "format": " {usage}%",
+    "interval": 2
+  },
+
+  "memory": {
+    "format": " {percentage}%",
+    "interval": 2
+  },
+
+  "battery": {
+    "states": {
+        "good": 95,
+        "warning": 30,
+        "critical": 20
+    },
+    "format": "{icon} {capacity}%",
+    "format-charging": " {capacity}%",       // 充电时覆盖为闪电
+    "format-plugged": " {capacity}%",        // 插电时覆盖为电源
+    "format-full": " 100%",                  // 满电时覆盖
+    "format-icons": ["", "", "", "", ""], // 放电时的图标序列
+    "interval": 5
+  },
+
+  "tray": {
+    "spacing": 6,
+    "icon-size": 16
+  }
+}
