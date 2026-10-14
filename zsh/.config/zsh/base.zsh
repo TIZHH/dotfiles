@@ -1,7 +1,6 @@
-# Shared Zsh configuration. No Oh My Zsh or Powerlevel10k is loaded here.
+# Shared Zsh configuration. Powerlevel10k is loaded directly without Oh My Zsh.
 unset ZSH ZSH_CUSTOM ZSH_CACHE_DIR plugins
 
-PROMPT='%F{green}%n@%m%f %F{blue}%~%f %F{cyan}❯%f '
 REPORTTIME=5
 
 # ===== History =====
@@ -50,6 +49,14 @@ fi
 
 if [[ -r /usr/share/doc/pkgfile/command-not-found.zsh ]]; then
     source /usr/share/doc/pkgfile/command-not-found.zsh
+fi
+
+# ===== Prompt =====
+if [[ -r /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme ]]; then
+    source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
+    [[ -r "$HOME/.p10k.zsh" ]] && source "$HOME/.p10k.zsh"
+else
+    PROMPT='%F{green}%n@%m%f %F{blue}%~%f %F{cyan}❯%f '
 fi
 
 # Syntax highlighting should be loaded after the other shared plugins.

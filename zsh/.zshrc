@@ -1,4 +1,10 @@
-# Load the shared shell behavior first. This replaces CachyOS/Oh My Zsh.
+# Powerlevel10k instant prompt must stay near the top of ~/.zshrc.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+    source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+# Load the shared shell behavior first. This replaces CachyOS/Oh My Zsh while
+# still using Powerlevel10k as a standalone prompt theme.
 source "${XDG_CONFIG_HOME:-$HOME/.config}/zsh/base.zsh"
 
 # Secret values stay outside Git. See ~/.zshrc.secrets.example.

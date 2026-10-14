@@ -9,7 +9,7 @@
 - Waybar
 - Wofi
 - Kitty
-- 原生 Zsh、fzf 与常用补全/高亮插件（不使用 Oh My Zsh）
+- 原生 Zsh、独立 Powerlevel10k、fzf 与常用补全/高亮插件（不使用 Oh My Zsh）
 - 当前桌面和锁屏使用的壁纸
 - Hyprland 环境所需的软件包清单
 
@@ -50,8 +50,9 @@ sudo systemctl enable --now NetworkManager bluetooth
 
 Zsh 配置分为两层：
 
-- `~/.config/zsh/base.zsh`：历史、补全、通用 alias 和插件等基础配置。
+- `~/.config/zsh/base.zsh`：历史、补全、通用 alias、Powerlevel10k 和插件等基础配置。
 - `~/.zshrc`：代理、AI/Codex、项目路径等个人配置，开头会加载基础配置。
+- `~/.p10k.zsh`：Powerlevel10k 的外观配置。
 
 令牌和 Wi-Fi 密码不应进入 Git。首次恢复后创建私密配置：
 

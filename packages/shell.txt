@@ -3,7 +3,8 @@ zsh
 fzf
 pkgfile
 
-# Zsh plugins referenced by .zshrc
+# Zsh prompt and plugins referenced by the base config
+zsh-theme-powerlevel10k
 zsh-autosuggestions
 zsh-history-substring-search
 zsh-syntax-highlighting
