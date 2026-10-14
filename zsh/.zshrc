@@ -3,9 +3,13 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
     source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-# Load the shared shell behavior first. This replaces CachyOS/Oh My Zsh while
-# still using Powerlevel10k as a standalone prompt theme.
-source "${XDG_CONFIG_HOME:-$HOME/.config}/zsh/base.zsh"
+# Default shell setup: CachyOS configuration loads Oh My Zsh, its fzf plugin,
+# Powerlevel10k, completion, autosuggestions, and syntax highlighting.
+if [[ -r /usr/share/cachyos-zsh-config/cachyos-config.zsh ]]; then
+    source /usr/share/cachyos-zsh-config/cachyos-config.zsh
+else
+    print -u2 "CachyOS Zsh config is missing; run ./bootstrap.sh --install"
+fi
 
 # Secret values stay outside Git. See ~/.zshrc.secrets.example.
 secrets_file="${ZSH_SECRETS_FILE:-$HOME/.zshrc.secrets}"

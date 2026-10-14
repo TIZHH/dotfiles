@@ -1,9 +1,10 @@
 # Shell
 zsh
+cachyos-zsh-config
 fzf
 pkgfile
 
-# Zsh prompt and plugins referenced by the base config
+# Zsh prompt and plugins used by the CachyOS config
 zsh-theme-powerlevel10k
 zsh-autosuggestions
 zsh-history-substring-search

@@ -9,7 +9,7 @@
 - Waybar
 - Wofi
 - Kitty
-- 原生 Zsh、独立 Powerlevel10k、fzf 与常用补全/高亮插件（不使用 Oh My Zsh）
+- CachyOS Zsh、Oh My Zsh、Powerlevel10k、fzf 与常用补全/高亮插件
 - 当前桌面和锁屏使用的壁纸
 - Hyprland 环境所需的软件包清单
 
@@ -48,11 +48,12 @@ sudo systemctl enable --now NetworkManager bluetooth
 ~/Pictures/papers/pexels-splitshire-1562.jpg
 ```
 
-Zsh 配置分为两层：
+`bootstrap.sh` 默认部署 `zsh/.zshrc`，使用 CachyOS 提供的 Oh My Zsh、
+fzf 和 Powerlevel10k 配置。个人代理、AI/Codex 和项目路径也保留在该文件中。
 
-- `~/.config/zsh/base.zsh`：历史、补全、通用 alias、Powerlevel10k 和插件等基础配置。
-- `~/.zshrc`：代理、AI/Codex、项目路径等个人配置，开头会加载基础配置。
-- `~/.p10k.zsh`：Powerlevel10k 的外观配置。
+不使用 Oh My Zsh 的旧配置保存在
+`variants/zsh/zshrc.no-oh-my-zsh`，仅用于参考或手动切换，不会被恢复脚本部署。
+Powerlevel10k 的外观配置保存在 `zsh/.p10k.zsh`。
 
 令牌和 Wi-Fi 密码不应进入 Git。首次恢复后创建私密配置：
 
