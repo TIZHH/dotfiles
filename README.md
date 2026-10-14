@@ -9,7 +9,7 @@
 - Waybar
 - Wofi
 - Kitty
-- Zsh、fzf 与常用补全/高亮插件
+- 原生 Zsh、fzf 与常用补全/高亮插件（不使用 Oh My Zsh）
 - 当前桌面和锁屏使用的壁纸
 - Hyprland 环境所需的软件包清单
 
@@ -48,8 +48,19 @@ sudo systemctl enable --now NetworkManager bluetooth
 ~/Pictures/papers/pexels-splitshire-1562.jpg
 ```
 
-每台机器独有的路径、代理设置和密钥应写入不受 Git 管理的
-`~/.zshrc.local`；仓库中的 `.zshrc` 会在最后自动加载它。
+Zsh 配置分为两层：
+
+- `~/.config/zsh/base.zsh`：历史、补全、通用 alias 和插件等基础配置。
+- `~/.zshrc`：代理、AI/Codex、项目路径等个人配置，开头会加载基础配置。
+
+令牌和 Wi-Fi 密码不应进入 Git。首次恢复后创建私密配置：
+
+```bash
+cp ~/.zshrc.secrets.example ~/.zshrc.secrets
+chmod 600 ~/.zshrc.secrets
+```
+
+然后填写 `~/.zshrc.secrets`。`.zshrc` 会自动加载该文件，但不会打印令牌内容。
 
 修改配置后正常使用 Git 提交即可：
 

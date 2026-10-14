@@ -2,7 +2,6 @@
 zsh
 fzf
 pkgfile
-xclip
 
 # Zsh plugins referenced by .zshrc
 zsh-autosuggestions
