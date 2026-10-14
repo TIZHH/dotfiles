@@ -29,6 +29,16 @@ cd ~/Workspace/dotfiles
 
 脚本不会覆盖主目录中已有的普通文件。如果 Stow 报告冲突，请先备份对应配置，再重新执行脚本。
 
+## `bootstrap.sh` 做了什么
+
+- 使用 `--install` 时，读取 `packages/*.txt`，去重后通过 `pacman` 安装缺少的软件。
+- 检查 GNU Stow，并创建必要的 `~/.config` 和壁纸目录。
+- 先模拟检查全部链接；遇到已有普通文件时直接停止，不进行部分部署或覆盖。
+- 使用 Stow 将 Hyprland、Waybar、Wofi、Kitty、壁纸和默认 Zsh 配置链接到主目录。
+- 不带参数运行时只更新配置链接，不安装软件。
+
+脚本不会写入私密配置，也不会自动启用 NetworkManager、蓝牙等系统服务。
+
 网络和蓝牙服务可在新系统中按需启用：
 
 ```bash
