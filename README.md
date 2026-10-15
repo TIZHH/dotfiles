@@ -13,6 +13,8 @@
 - `wallpapers/Pictures/papers/`：桌面和锁屏壁纸
 - `packages/*.txt`：软件包清单
 
+快捷键和鼠标操作见 [`KEYBINDINGS.md`](KEYBINDINGS.md)。
+
 ## 新系统恢复
 
 ```bash
